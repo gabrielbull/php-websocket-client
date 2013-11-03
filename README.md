@@ -51,7 +51,7 @@ class Client implements WebSocketClient\WebSocketClientInterface
 
     public function publish($topic, $message)
     {
-        $this->getClient()->publish($topic, $message);
+        $this->client->publish($topic, $message);
     }
 
     public function setClient(WebSocketClient $client)
