@@ -58,9 +58,14 @@ class Client implements WebSocketClientInterface
         }
     }
 
-    public function call()
+    /**
+     * @param $proc
+     * @param $args
+     * @param callable $callback
+     */
+    public function call($proc, $args, Closure $callback = null)
     {
-
+        $this->client->call($proc, $args, $callback);
     }
 
     /**

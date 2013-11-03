@@ -16,7 +16,7 @@ class WebSocketClient
     const TYPE_ID_WELCOME = 0;
     const TYPE_ID_PREFIX = 1;
     const TYPE_ID_CALL = 2;
-    const TYPE_ID_RESULT = 3;
+    const TYPE_ID_CALLRESULT = 3;
     const TYPE_ID_ERROR = 4;
     const TYPE_ID_SUBSCRIBE = 5;
     const TYPE_ID_UNSUBSCRIBE = 6;
@@ -47,6 +47,9 @@ class WebSocketClient
     /** @var bool $connected */
     private $connected = false;
 
+    /** @var array $callbacks */
+    private $callbacks = array();
+
     /**
      * @param WebSocketClientInterface $client
      * @param StreamSelectLoop $loop
@@ -61,7 +64,7 @@ class WebSocketClient
             ->setPort($port)
             ->setPath($path)
             ->setClient($client)
-            ->setKey($this->generateToken());
+            ->setKey($this->generateToken(self::TOKEN_LENGHT));
 
         $this->connect();
         $client->setClient($this);
@@ -139,8 +142,23 @@ class WebSocketClient
         ));
     }
 
-    public function call($method)
+    /**
+     * @param $procUri
+     * @param array $args
+     * @param callable $callback
+     */
+    public function call($procUri, array $args, Closure $callback = null)
     {
+        $callId = self::generateAlphaNumToken(16);
+        $this->callbacks[$callId] = $callback;
+
+        $data = array(
+            self::TYPE_ID_CALL,
+            $callId,
+            $procUri
+        );
+        $data= array_merge($data, $args);
+        $this->sendData($data);
     }
 
     /**
@@ -158,6 +176,15 @@ class WebSocketClient
             switch($data[0]) {
                 case self::TYPE_ID_WELCOME:
                     $this->getClient()->onWelcome($data);
+                    break;
+                case self::TYPE_ID_CALLRESULT:
+                    if (isset($data[1])) {
+                        $id = $data[1];
+                        if (isset($this->callbacks[$id])) {
+                            $callback = $this->callbacks[$id];
+                            $callback((isset($data[2]) ? $data[2] : array()));
+                        }
+                    }
                     break;
             }
         }
@@ -263,14 +290,16 @@ class WebSocketClient
     /**
      * Generate token
      *
+     * @param int $length
      * @return string
      */
-    private function generateToken()
+    private function generateToken($length)
     {
         $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"§$%&/()=[]{}';
+
         $useChars = array();
         // select some random chars:
-        for ($i = 0; $i < self::TOKEN_LENGHT; $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $useChars[] = $characters[mt_rand(0, strlen($characters) - 1)];
         }
         // Add numbers
@@ -280,6 +309,28 @@ class WebSocketClient
         $randomString = substr($randomString, 0, self::TOKEN_LENGHT);
 
         return base64_encode($randomString);
+    }
+
+    /**
+     * Generate token
+     *
+     * @param int $length
+     * @return string
+     */
+    public function generateAlphaNumToken($length)
+    {
+        $characters = str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+
+        srand((float)microtime() * 1000000);
+
+        $token = '';
+
+        do {
+            shuffle($characters);
+            $token .= $characters[mt_rand(0, (count($characters) - 1))];
+        } while (strlen($token) < $length);
+
+        return $token;
     }
 
     /**

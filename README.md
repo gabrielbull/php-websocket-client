@@ -44,14 +44,14 @@ class Client implements WebSocketClient\WebSocketClientInterface
         $this->client->unsubscribe($topic);
     }
 
+    public function call($proc, $args, Closure $callback = null)
+    {
+        $this->client->call($proc, $args, $callback);
+    }
+
     public function setClient(WebSocketClient $client)
     {
         $this->client = $client;
-    }
-
-    public function getClient()
-    {
-        return $this->client;
     }
 }
 

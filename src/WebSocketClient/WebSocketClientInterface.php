@@ -17,9 +17,4 @@ interface WebSocketClientInterface
      * @return mixed
      */
     function setClient(WebSocketClient $client);
-
-    /**
-     * @return WebSocketClient
-     */
-    function getClient();
 }

@@ -134,7 +134,6 @@ class Server implements WampServerInterface
      */
     public function onOpen(ConnectionInterface $conn)
     {
-        echo '';
     }
 
     /**
@@ -142,7 +141,6 @@ class Server implements WampServerInterface
      */
     public function onClose(ConnectionInterface $conn)
     {
-        echo '';
     }
 
     /**
@@ -153,7 +151,11 @@ class Server implements WampServerInterface
      */
     public function onCall(ConnectionInterface $conn, $id, $topic, array $params)
     {
-        echo '';
+        $conn->send(json_encode(array(
+            3,
+            $id,
+            $params
+        )));
     }
 
     /**
