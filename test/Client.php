@@ -27,6 +27,9 @@ class Client implements WebSocketClientInterface
     /** @var callable $onWelcomeCallback */
     private $onWelcomeCallback;
 
+    /** @var callable $onWelcomeCallback */
+    private $onEventCallback;
+
     /**
      * Init websocket client
      *
@@ -55,6 +58,19 @@ class Client implements WebSocketClientInterface
         if ($this->onWelcomeCallback instanceof Closure) {
             $closure = $this->onWelcomeCallback;
             $closure($this, $data);
+        }
+    }
+
+    /**
+     * @param string $topic
+     * @param array $data
+     * @return void
+     */
+    public function onEvent($topic, $data)
+    {
+        if ($this->onEventCallback instanceof Closure) {
+            $closure = $this->onEventCallback;
+            $closure($this, $topic, $data);
         }
     }
 
@@ -124,6 +140,17 @@ class Client implements WebSocketClientInterface
         $this->onWelcomeCallback = $callback;
         return $this;
     }
+
+    /**
+     * @param callable $onEventCallback
+     * @return self
+     */
+    public function setOnEventCallback(Closure $onEventCallback)
+    {
+        $this->onEventCallback = $onEventCallback;
+        return $this;
+    }
+
 
     /**
      * @param string $host

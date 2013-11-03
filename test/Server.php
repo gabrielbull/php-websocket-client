@@ -36,6 +36,9 @@ class Server implements WampServerInterface
     /** @var IoServer $server */
     private $server;
 
+    /** @var Topic[] $subscribers */
+    private $subscribers = array();
+
     /** @var callable $onSubscribeCallback */
     private $onSubscribeCallback;
 
@@ -109,11 +112,26 @@ class Server implements WampServerInterface
     }
 
     /**
+     * @param string $topic
+     * @param string $message
+     */
+    public function broadcast($topic, $message)
+    {
+        foreach($this->subscribers as $subscriber) {
+            if ($subscriber->getId() === $topic) {
+                $subscriber->broadcast($message);
+            }
+        }
+    }
+
+    /**
      * @param ConnectionInterface $conn
      * @param Topic|string $topic
      */
     public function onSubscribe(ConnectionInterface $conn, $topic)
     {
+        $this->subscribers[] = $topic;
+
         $callback = $this->getOnSubscribeCallback();
         if (null !== $callback) {
             $callback($conn, $topic);

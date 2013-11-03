@@ -199,6 +199,11 @@ class WebSocketClient
                         }
                     }
                     break;
+                case self::TYPE_ID_EVENT:
+                    if (isset($data[1]) && isset($data[2])) {
+                        $this->getClient()->onEvent($data[1], $data[2]);
+                    }
+                    break;
             }
         }
     }

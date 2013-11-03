@@ -34,6 +34,10 @@ class Client implements WebSocketClient\WebSocketClientInterface
     {
     }
 
+    public function onEvent($topic, $message)
+    {
+    }
+
     public function subscribe($topic)
     {
         $this->client->subscribe($topic);
