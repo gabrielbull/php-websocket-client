@@ -42,6 +42,9 @@ class Server implements WampServerInterface
     /** @var callable $onUnSubscribeCallback */
     private $onUnSubscribeCallback;
 
+    /** @var callable $onUnSubscribeCallback */
+    private $onPublishCallback;
+
     /**
      * Init websocket server
      *
@@ -167,7 +170,10 @@ class Server implements WampServerInterface
      */
     public function onPublish(ConnectionInterface $conn, $topic, $event, array $exclude, array $eligible)
     {
-        echo '';
+        $callback = $this->getOnPublishCallback();
+        if (null !== $callback) {
+            $callback($conn, $topic, $event);
+        }
     }
 
     /**
@@ -176,7 +182,6 @@ class Server implements WampServerInterface
      */
     public function onError(ConnectionInterface $conn, Exception $e)
     {
-        echo '';
     }
 
     /**
@@ -213,6 +218,24 @@ class Server implements WampServerInterface
     public function getOnUnSubscribeCallback()
     {
         return $this->onUnSubscribeCallback;
+    }
+
+    /**
+     * @param callable $onPublishCallback
+     * @return self
+     */
+    public function setOnPublishCallback(Closure $onPublishCallback)
+    {
+        $this->onPublishCallback = $onPublishCallback;
+        return $this;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getOnPublishCallback()
+    {
+        return $this->onPublishCallback;
     }
 
     /**

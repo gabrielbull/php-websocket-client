@@ -116,8 +116,21 @@ class WebSocketClient
         return $this->connected;
     }
 
-    public function publish($data)
+    /**
+     * @param string $topicUri
+     * @param string $event
+     * @param array $exclude
+     * @param array $eligible
+     */
+    public function publish($topicUri, $event, array $exclude = array(), array $eligible = array())
     {
+        $this->sendData(array(
+            self::TYPE_ID_PUBLISH,
+            $topicUri,
+            $event,
+            $exclude,
+            $eligible
+        ));
     }
 
     /**

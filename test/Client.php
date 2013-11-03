@@ -88,9 +88,13 @@ class Client implements WebSocketClientInterface
         $this->getClient()->unsubscribe($topic);
     }
 
-    public function publish()
+    /**
+     * @param $topic
+     * @param $message
+     */
+    public function publish($topic, $message)
     {
-
+        $this->getClient()->publish($topic, $message);
     }
 
     /**
