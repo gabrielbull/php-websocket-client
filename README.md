@@ -30,9 +30,8 @@ class Client implements WebSocketClient\WebSocketClientInterface
 {
     private $client;
 
-    public function onReceive(array $data, array $header)
+    public function onWelcome(array $data)
     {
-        // Do something with the data
     }
 
     public function subscribe($topic)
