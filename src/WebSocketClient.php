@@ -262,7 +262,7 @@ class WebSocketClient
             $host = 'localhost';
         }
 
-        return "GET /mytest HTTP/1.1" . "\r\n" .
+        return "GET {$this->getPath()} HTTP/1.1" . "\r\n" .
         "Origin: null" . "\r\n" .
         "Host: {$host}:{$this->getPort()}" . "\r\n" .
         "Sec-WebSocket-Key: {$this->getKey()}" . "\r\n" .
