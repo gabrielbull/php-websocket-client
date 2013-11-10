@@ -5,6 +5,10 @@ use React\Socket\Connection;
 use React\Stream\Stream;
 use WebSocketClient\WebSocketClientInterface;
 
+if (!defined("STDOUT")) {
+    define("STDOUT", "php://output");
+}
+
 /**
  * Class WebSocketClient
  */
