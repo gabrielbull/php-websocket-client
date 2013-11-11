@@ -5,10 +5,6 @@ use React\Socket\Connection;
 use React\Stream\Stream;
 use WebSocketClient\WebSocketClientInterface;
 
-if (!defined("STDOUT")) {
-    define("STDOUT", "php://output");
-}
-
 /**
  * Class WebSocketClient
  */
@@ -93,7 +89,6 @@ class WebSocketClient
 
         $client = stream_socket_client("tcp://{$this->getHost()}:{$this->getPort()}");
         $this->setSocket(new Connection($client, $this->getLoop()));
-        $this->getSocket()->pipe(new Stream(STDOUT, $this->getLoop()));
         $this->getSocket()->on('data', function ($data) use ($root) {
             $data = $root->parseIncomingRaw($data);
             $root->parseData($data);
