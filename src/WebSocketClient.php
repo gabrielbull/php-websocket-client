@@ -10,7 +10,7 @@ use WebSocketClient\WebSocketClientInterface;
  */
 class WebSocketClient
 {
-    const VERSION = '0.1';
+    const VERSION = '0.1.4';
     const TOKEN_LENGHT = 16;
 
     const TYPE_ID_WELCOME = 0;
