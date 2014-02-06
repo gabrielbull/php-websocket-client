@@ -1,14 +1,14 @@
 {
-    "name": "gavroche/websocket-client",
+    "name": "gabrielbull/websocket-client",
     "type": "library",
     "description": "A simple PHP WebSocket Client",
     "keywords": ["WebSocket", "Client"],
-    "homepage": "https://github.com/gavroche/php-websocket-client",
+    "homepage": "https://github.com/gabrielbull/php-websocket-client",
     "license": "MIT",
     "authors": [
         {
             "name": "Gabriel Bull",
-            "email": "gavroche.bull@gmail.com"
+            "email": "me@gabrielbull.com"
         }
     ],
     "require": {

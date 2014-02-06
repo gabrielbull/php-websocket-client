@@ -1,7 +1,7 @@
 WebSocket client
 ================
 
-[![Build Status](https://travis-ci.org/gavroche/php-websocket-client.png)](https://travis-ci.org/gavroche/php-websocket-client)
+[![Build Status](https://travis-ci.org/gabrielbull/php-websocket-client.png)](https://travis-ci.org/gabrielbull/php-websocket-client)
 
 A simple WebSocket WAMP client implemented in php.
 
@@ -16,7 +16,7 @@ It is recommended that you install the WebSocket client library [through compose
 ```JSON
 {
     "require": {
-        "gavroche/websocket-client": "dev-master"
+        "gabrielbull/websocket-client": "dev-master"
     }
 }
 ```
