@@ -1,7 +1,7 @@
 WebSocket client
 ================
 
-[![Build Status](https://travis-ci.org/gabrielbull/php-websocket-client.png)](https://travis-ci.org/gabrielbull/php-websocket-client)
+[![Build Status](https://travis-ci.org/gabrielbull/php-websocket-client.svg)](https://travis-ci.org/gabrielbull/php-websocket-client)
 
 A simple WebSocket WAMP client implemented in PHP.
 
