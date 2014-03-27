@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "WebSocketClient\\" : "src/"
+            "WebSocketClient\\" : "src/WebSocketClient"
         }
     }
 }
