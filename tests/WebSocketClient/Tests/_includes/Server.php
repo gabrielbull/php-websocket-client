@@ -1,6 +1,5 @@
 <?php
-
-namespace WebSocketClient\TestsHelpers;
+namespace WebSocketClient\Tests;
 
 use Exception;
 use Ratchet\ConnectionInterface;

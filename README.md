@@ -3,7 +3,7 @@ WebSocket client
 
 [![Build Status](https://travis-ci.org/gabrielbull/php-websocket-client.png)](https://travis-ci.org/gabrielbull/php-websocket-client)
 
-A simple WebSocket WAMP client implemented in php.
+A simple WebSocket WAMP client implemented in PHP.
 
 ## Requirements
 
@@ -25,8 +25,11 @@ It is recommended that you install the WebSocket client library [through compose
 
 Here is an example of a simple WebSocket client:
 
-```PHP
-class Client implements WebSocketClient\WebSocketClientInterface
+```php
+use WebSocketClient\WebSocketClient;
+use WebSocketClient\WebSocketClientInterface;
+
+class Client implements WebSocketClientInterface
 {
     private $client;
 

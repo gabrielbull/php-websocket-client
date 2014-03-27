@@ -1,14 +1,12 @@
 <?php
-
-namespace WebSocketClient\Tests;
+namespace WebSocketClient\Tests\WebSocketClient;
 
 use PHPUnit_Framework_TestCase;
 use React\EventLoop\Factory;
 use React\EventLoop\StreamSelectLoop;
-use WebSocketClient\TestsHelpers\Server;
-use WebSocketClient\TestsHelpers\Client;
 use Ratchet\ConnectionInterface;
-
+use WebSocketClient\Tests\Client;
+use WebSocketClient\Tests\Server;
 
 class SubscribtionTest extends PHPUnit_Framework_TestCase
 {

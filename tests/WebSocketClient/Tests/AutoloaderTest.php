@@ -2,7 +2,6 @@
 namespace WebSocketClient\Tests;
 
 use PHPUnit_Framework_TestCase;
-use WebSocketClient;
 use WebSocketClient\Autoloader;
 
 class AutoloaderTest extends PHPUnit_Framework_TestCase

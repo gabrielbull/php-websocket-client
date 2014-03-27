@@ -1,8 +1,5 @@
 <?php
-
 namespace WebSocketClient;
-
-use WebSocketClient;
 
 interface WebSocketClientInterface
 {

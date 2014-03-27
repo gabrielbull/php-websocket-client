@@ -1,15 +1,13 @@
 <?php
-
-namespace WebSocketClient\Tests;
+namespace WebSocketClient\Tests\WebSocketClient;
 
 use PHPUnit_Framework_TestCase;
 use React\EventLoop\Factory;
 use React\EventLoop\StreamSelectLoop;
-use WebSocketClient\TestsHelpers\Server;
-use WebSocketClient\TestsHelpers\Client;
-use Ratchet\ConnectionInterface;
+use WebSocketClient\Tests\Client;
+use WebSocketClient\Tests\Server;
 
-class PublishTest extends PHPUnit_Framework_TestCase
+class CallTest extends PHPUnit_Framework_TestCase
 {
     private $host = '127.0.0.1';
     private $port;
@@ -38,27 +36,22 @@ class PublishTest extends PHPUnit_Framework_TestCase
         $this->server->close();
     }
 
-    public function testPublish()
+    public function testCall()
     {
         $loop = $this->loop;
 
         $client = new Client($loop, $this->host, $this->port, $this->path);
 
-        $published = null;
-        $this->server->setOnPublishCallback(function(ConnectionInterface $conn, $topic, $event) use (&$published, $loop) {
-            /** @var \Ratchet\Wamp\Topic $topic */
-            $published = array('topic' => $topic->getId(), 'message' => $event);
-            $loop->stop();
-        });
-
         $response = null;
         $client->setOnWelcomeCallback(function (Client $conn, $data) use (&$response, $loop) {
-            $conn->publish('mytopic', 'my_message');
+            $conn->call('mymethod', array('my_value'), function($data) use (&$response, $loop) {
+                $response = $data;
+                $loop->stop();
+            });
         });
 
         $loop->run();
 
-        $this->assertEquals('mytopic', $published['topic']);
-        $this->assertEquals('my_message', $published['message']);
+        $this->assertEquals('my_value', $response[0]);
     }
 }

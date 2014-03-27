@@ -1,9 +1,8 @@
 <?php
-
-namespace WebSocketClient\TestsHelpers;
+namespace WebSocketClient\Tests;
 
 use Closure;
-use WebSocketClient;
+use WebSocketClient\WebSocketClient;
 use WebSocketClient\WebSocketClientInterface;
 use React\EventLoop\StreamSelectLoop;
 

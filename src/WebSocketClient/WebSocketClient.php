@@ -1,13 +1,10 @@
 <?php
+namespace WebSocketClient;
 
 use React\EventLoop\StreamSelectLoop;
 use React\Socket\Connection;
-use React\Stream\Stream;
-use WebSocketClient\WebSocketClientInterface;
+use WebSocketClient\Exception\ConnectionException;
 
-/**
- * Class WebSocketClient
- */
 class WebSocketClient
 {
     const VERSION = '0.1.4';
@@ -23,31 +20,49 @@ class WebSocketClient
     const TYPE_ID_PUBLISH = 7;
     const TYPE_ID_EVENT = 8;
 
-    /** @var string $key */
+    /**
+     * @var string
+     */
     private $key;
 
-    /** @var StreamSelectLoop $loop */
+    /**
+     * @var StreamSelectLoop
+     */
     private $loop;
 
-    /** @var WebSocketClientInterface $client */
+    /**
+     * @var WebSocketClientInterface
+     */
     private $client;
 
-    /** @var string $host */
+    /**
+     * @var string
+     */
     private $host;
 
-    /** @var int $port */
+    /**
+     * @var int
+     */
     private $port;
 
-    /** @var string $path */
+    /**
+     * @var string
+     */
     private $path;
 
-    /** @var Connection $socket */
+    /**
+     * @var Connection
+     */
     private $socket;
 
-    /** @var bool $connected */
+    /**
+     * @var bool
+     */
     private $connected = false;
 
-    /** @var array $callbacks */
+    /**
+     * @var array
+     */
     private $callbacks = array();
 
     /**
@@ -59,12 +74,12 @@ class WebSocketClient
      */
     function __construct(WebSocketClientInterface $client, StreamSelectLoop $loop, $host = '127.0.0.1', $port = 8080, $path = '/')
     {
-        $this->setLoop($loop)
-            ->setHost($host)
-            ->setPort($port)
-            ->setPath($path)
-            ->setClient($client)
-            ->setKey($this->generateToken(self::TOKEN_LENGHT));
+        $this->setLoop($loop);
+        $this->setHost($host);
+        $this->setPort($port);
+        $this->setPath($path);
+        $this->setClient($client);
+        $this->setKey($this->generateToken(self::TOKEN_LENGHT));
 
         $this->connect();
         $client->setClient($this);
@@ -81,13 +96,17 @@ class WebSocketClient
     /**
      * Connect client to server
      *
-     * @return self
+     * @throws ConnectionException
+     * @return $this
      */
     public function connect()
     {
         $root = $this;
 
-        $client = stream_socket_client("tcp://{$this->getHost()}:{$this->getPort()}");
+        $client = @stream_socket_client("tcp://{$this->getHost()}:{$this->getPort()}");
+        if (!$client) {
+            throw new ConnectionException;
+        }
         $this->setSocket(new Connection($client, $this->getLoop()));
         $this->getSocket()->on('data', function ($data) use ($root) {
             $data = $root->parseIncomingRaw($data);
@@ -104,7 +123,9 @@ class WebSocketClient
     public function disconnect()
     {
         $this->connected = false;
-        $this->socket->close();
+        if ($this->socket instanceof Connection) {
+            $this->socket->close();
+        }
     }
 
     /**
@@ -159,7 +180,7 @@ class WebSocketClient
      * @param array $args
      * @param callable $callback
      */
-    public function call($procUri, array $args, Closure $callback = null)
+    public function call($procUri, array $args, callable $callback = null)
     {
         $callId = self::generateAlphaNumToken(16);
         $this->callbacks[$callId] = $callback;
@@ -352,7 +373,7 @@ class WebSocketClient
 
     /**
      * @param int $port
-     * @return self
+     * @return $this
      */
     public function setPort($port)
     {
@@ -370,7 +391,7 @@ class WebSocketClient
 
     /**
      * @param Connection $socket
-     * @return self
+     * @return $this
      */
     public function setSocket(Connection $socket)
     {
@@ -388,7 +409,7 @@ class WebSocketClient
 
     /**
      * @param string $host
-     * @return self
+     * @return $this
      */
     public function setHost($host)
     {
@@ -406,7 +427,7 @@ class WebSocketClient
 
     /**
      * @param string $key
-     * @return self
+     * @return $this
      */
     public function setKey($key)
     {
@@ -424,7 +445,7 @@ class WebSocketClient
 
     /**
      * @param string $path
-     * @return self
+     * @return $this
      */
     public function setPath($path)
     {
@@ -442,7 +463,7 @@ class WebSocketClient
 
     /**
      * @param WebSocketClientInterface $client
-     * @return self
+     * @return $this
      */
     public function setClient(WebSocketClientInterface $client)
     {
@@ -460,7 +481,7 @@ class WebSocketClient
 
     /**
      * @param StreamSelectLoop $loop
-     * @return self
+     * @return $this
      */
     public function setLoop(StreamSelectLoop $loop)
     {

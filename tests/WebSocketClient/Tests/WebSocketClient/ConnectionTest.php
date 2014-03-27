@@ -1,15 +1,13 @@
 <?php
-
-namespace WebSocketClient\Tests;
+namespace WebSocketClient\Tests\WebSocketClient;
 
 use PHPUnit_Framework_TestCase;
 use React\EventLoop\Factory;
 use React\EventLoop\StreamSelectLoop;
-use WebSocketClient\TestsHelpers\Server;
-use WebSocketClient\TestsHelpers\Client;
-use Ratchet\ConnectionInterface;
+use WebSocketClient\Tests\Client;
+use WebSocketClient\Tests\Server;
 
-class EventTest extends PHPUnit_Framework_TestCase
+class ConnectionTest extends PHPUnit_Framework_TestCase
 {
     private $host = '127.0.0.1';
     private $port;
@@ -38,31 +36,30 @@ class EventTest extends PHPUnit_Framework_TestCase
         $this->server->close();
     }
 
-    public function testEvent()
+    public function testConnection()
     {
         $loop = $this->loop;
 
         $client = new Client($loop, $this->host, $this->port, $this->path);
 
-        $server = $this->server;
-        $this->server->setOnSubscribeCallback(function(ConnectionInterface $conn, $topic) use ($server) {
-            /** @var \Ratchet\Wamp\Topic $topic */
-            $server->broadcast($topic->getId(), 'this is my message');
-        });
-
         $response = null;
-        $client->setOnEventCallback(function (Client $conn, $topic, $data) use (&$response, $loop) {
-            $response = array('topic' => $topic, 'message' => $data);
+        $client->setOnWelcomeCallback(function (Client $conn, array $data) use (&$response, $loop) {
+            $response = $data;
             $loop->stop();
-        });
-
-        $client->setOnWelcomeCallback(function (Client $conn, $data) {
-            $conn->subscribe('test_topic');
         });
 
         $loop->run();
 
-        $this->assertEquals('test_topic', $response['topic']);
-        $this->assertEquals('this is my message', $response['message']);
+        $this->assertNotNull($response);
+    }
+
+    /**
+     * @expectedException \WebSocketClient\Exception\ConnectionException
+     */
+    public function testConnectionFail()
+    {
+        $loop = $this->loop;
+        $client = new Client($loop, $this->host, 0, $this->path);
+        $loop->run();
     }
 }
