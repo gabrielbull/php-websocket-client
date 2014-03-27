@@ -5,6 +5,9 @@ WebSocket client
 
 A simple WebSocket WAMP client implemented in PHP.
 
+This is an implementation of WAMP version 1. I have not had the time to implement WAMP 2, but if you do, that would be
+awesome.
+
 ## Requirements
 
 This library uses PHP 5.3+.
