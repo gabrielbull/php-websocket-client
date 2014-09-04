@@ -44,6 +44,11 @@ class WebSocketClient
      * @var int
      */
     private $port;
+    
+    /**
+     * @var string
+     */
+    private $origin;
 
     /**
      * @var string
@@ -72,13 +77,14 @@ class WebSocketClient
      * @param int $port
      * @param string $path
      */
-    function __construct(WebSocketClientInterface $client, StreamSelectLoop $loop, $host = '127.0.0.1', $port = 8080, $path = '/')
+    function __construct(WebSocketClientInterface $client, StreamSelectLoop $loop, $host = '127.0.0.1', $port = 8080, $path = '/', $origin = "null")
     {
         $this->setLoop($loop);
         $this->setHost($host);
         $this->setPort($port);
         $this->setPath($path);
         $this->setClient($client);
+        $this->setOrigin($origin);
         $this->setKey($this->generateToken(self::TOKEN_LENGHT));
 
         $this->connect();
@@ -283,7 +289,7 @@ class WebSocketClient
         }
 
         return "GET {$this->getPath()} HTTP/1.1" . "\r\n" .
-        "Origin: null" . "\r\n" .
+        "Origin: {$this->getOrigin()}" . "\r\n" .
         "Host: {$host}:{$this->getPort()}" . "\r\n" .
         "Sec-WebSocket-Key: {$this->getKey()}" . "\r\n" .
         "User-Agent: PHPWebSocketClient/" . self::VERSION . "\r\n" .
@@ -423,6 +429,22 @@ class WebSocketClient
     public function getHost()
     {
         return $this->host;
+    }
+    
+    /**
+     * @param string $origin
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = (string)$origin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
     }
 
     /**
