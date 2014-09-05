@@ -2,9 +2,9 @@
 namespace WebSocketClient\Tests\WebSocketClient;
 
 use PHPUnit_Framework_TestCase;
+use Ratchet\ConnectionInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\StreamSelectLoop;
-use Ratchet\ConnectionInterface;
 use WebSocketClient\Tests\Client;
 use WebSocketClient\Tests\Server;
 
@@ -14,10 +14,14 @@ class SubscribtionTest extends PHPUnit_Framework_TestCase
     private $port;
     private $path = '/mytest';
 
-    /** @var StreamSelectLoop */
+    /**
+     * @var StreamSelectLoop
+     */
     private $loop;
 
-    /** @var Server */
+    /**
+     * @var Server
+     */
     private $server;
 
     public function setUp()
@@ -42,7 +46,7 @@ class SubscribtionTest extends PHPUnit_Framework_TestCase
         $loop = $this->loop;
 
         $subscribed = null;
-        $this->server->setOnSubscribeCallback(function(ConnectionInterface $conn, $topic) use (&$subscribed, $loop) {
+        $this->server->setOnSubscribeCallback(function (ConnectionInterface $conn, $topic) use (&$subscribed, $loop) {
             /** @var \Ratchet\Wamp\Topic $topic */
             $subscribed = $topic->getId();
             $loop->stop();
@@ -66,13 +70,13 @@ class SubscribtionTest extends PHPUnit_Framework_TestCase
         $client = new Client($loop, $this->host, $this->port, $this->path);
 
         $unsubscribed = null;
-        $this->server->setOnUnSubscribeCallback(function(ConnectionInterface $conn, $topic) use (&$unsubscribed, $loop) {
+        $this->server->setOnUnSubscribeCallback(function (ConnectionInterface $conn, $topic) use (&$unsubscribed, $loop) {
             /** @var \Ratchet\Wamp\Topic $topic */
             $unsubscribed = $topic->getId();
             $loop->stop();
         });
 
-        $this->server->setOnSubscribeCallback(function(ConnectionInterface $conn, $topic) use ($client) {
+        $this->server->setOnSubscribeCallback(function (ConnectionInterface $conn, $topic) use ($client) {
             $client->unsubscribe('this_is_my_new_topic');
         });
 

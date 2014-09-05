@@ -1,55 +1,71 @@
 <?php
 namespace WebSocketClient\Tests;
 
+use Closure;
 use Exception;
 use Ratchet\ConnectionInterface;
 use Ratchet\Http\HttpServer;
 use Ratchet\Http\Router;
+use Ratchet\Server\IoServer;
+use Ratchet\Wamp\Topic;
 use Ratchet\Wamp\WampServer;
 use Ratchet\Wamp\WampServerInterface;
-use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
-use Ratchet\Wamp\Topic;
 use React\EventLoop\StreamSelectLoop;
 use React\Socket\Server as Reactor;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Closure;
 
 class Server implements WampServerInterface
 {
-    /** @var RouteCollection $routes */
+    /**
+     * @var RouteCollection
+     */
     private $routes;
 
-    /** @var int $port */
+    /**
+     * @var int
+     */
     private $port;
 
-    /** @var string $path */
+    /**
+     * @var string
+     */
     private $path;
 
-    /** @var Reactor $socket */
+    /**
+     * @var Reactor
+     */
     private $socket;
 
-    /** @var IoServer $server */
+    /**
+     * @var IoServer
+     */
     private $server;
 
-    /** @var Topic[] $subscribers */
+    /**
+     * @var Topic[]
+     */
     private $subscribers = array();
 
-    /** @var callable $onSubscribeCallback */
+    /**
+     * @var callable
+     */
     private $onSubscribeCallback;
 
-    /** @var callable $onUnSubscribeCallback */
+    /**
+     * @var callable
+     */
     private $onUnSubscribeCallback;
 
-    /** @var callable $onUnSubscribeCallback */
+    /**
+     * @var callable
+     */
     private $onPublishCallback;
 
     /**
-     * Init websocket server
-     *
      * @param StreamSelectLoop $loop
      * @param int $port
      * @param string $path
@@ -116,7 +132,7 @@ class Server implements WampServerInterface
      */
     public function broadcast($topic, $message)
     {
-        foreach($this->subscribers as $subscriber) {
+        foreach ($this->subscribers as $subscriber) {
             if ($subscriber->getId() === $topic) {
                 $subscriber->broadcast($message);
             }

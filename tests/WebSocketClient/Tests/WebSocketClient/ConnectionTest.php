@@ -13,10 +13,14 @@ class ConnectionTest extends PHPUnit_Framework_TestCase
     private $port;
     private $path = '/mytest';
 
-    /** @var StreamSelectLoop */
+    /**
+     * @var StreamSelectLoop
+     */
     private $loop;
 
-    /** @var Server */
+    /**
+     * @var Server
+     */
     private $server;
 
     public function setUp()

@@ -2,4 +2,5 @@
 namespace WebSocketClient\Exception;
 
 class ConnectionException extends \Exception
-{}
+{
+}

@@ -2,9 +2,9 @@
 namespace WebSocketClient\Tests;
 
 use Closure;
+use React\EventLoop\StreamSelectLoop;
 use WebSocketClient\WebSocketClient;
 use WebSocketClient\WebSocketClientInterface;
-use React\EventLoop\StreamSelectLoop;
 
 class Client implements WebSocketClientInterface
 {

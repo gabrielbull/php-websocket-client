@@ -13,10 +13,14 @@ class CallTest extends PHPUnit_Framework_TestCase
     private $port;
     private $path = '/mytest';
 
-    /** @var StreamSelectLoop */
+    /**
+     * @var StreamSelectLoop
+     */
     private $loop;
 
-    /** @var Server */
+    /**
+     * @var Server
+     */
     private $server;
 
     public function setUp()
@@ -44,7 +48,7 @@ class CallTest extends PHPUnit_Framework_TestCase
 
         $response = null;
         $client->setOnWelcomeCallback(function (Client $conn, $data) use (&$response, $loop) {
-            $conn->call('mymethod', array('my_value'), function($data) use (&$response, $loop) {
+            $conn->call('mymethod', array('my_value'), function ($data) use (&$response, $loop) {
                 $response = $data;
                 $loop->stop();
             });

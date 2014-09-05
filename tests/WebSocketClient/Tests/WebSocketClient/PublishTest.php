@@ -2,9 +2,9 @@
 namespace WebSocketClient\Tests\WebSocketClient;
 
 use PHPUnit_Framework_TestCase;
+use Ratchet\ConnectionInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\StreamSelectLoop;
-use Ratchet\ConnectionInterface;
 use WebSocketClient\Tests\Client;
 use WebSocketClient\Tests\Server;
 
@@ -14,10 +14,14 @@ class PublishTest extends PHPUnit_Framework_TestCase
     private $port;
     private $path = '/mytest';
 
-    /** @var StreamSelectLoop */
+    /**
+     * @var StreamSelectLoop
+     */
     private $loop;
 
-    /** @var Server */
+    /**
+     * @var Server
+     */
     private $server;
 
     public function setUp()
@@ -44,7 +48,7 @@ class PublishTest extends PHPUnit_Framework_TestCase
         $client = new Client($loop, $this->host, $this->port, $this->path);
 
         $published = null;
-        $this->server->setOnPublishCallback(function(ConnectionInterface $conn, $topic, $event) use (&$published, $loop) {
+        $this->server->setOnPublishCallback(function (ConnectionInterface $conn, $topic, $event) use (&$published, $loop) {
             /** @var \Ratchet\Wamp\Topic $topic */
             $published = array('topic' => $topic->getId(), 'message' => $event);
             $loop->stop();

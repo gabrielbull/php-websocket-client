@@ -44,7 +44,7 @@ class WebSocketClient
      * @var int
      */
     private $port;
-    
+
     /**
      * @var string
      */
@@ -76,8 +76,9 @@ class WebSocketClient
      * @param string $host
      * @param int $port
      * @param string $path
+     * @param null|string $origin
      */
-    function __construct(WebSocketClientInterface $client, StreamSelectLoop $loop, $host = '127.0.0.1', $port = 8080, $path = '/', $origin = "null")
+    function __construct(WebSocketClientInterface $client, StreamSelectLoop $loop, $host = '127.0.0.1', $port = 8080, $path = '/', $origin = null)
     {
         $this->setLoop($loop);
         $this->setHost($host);
@@ -196,7 +197,7 @@ class WebSocketClient
             $callId,
             $procUri
         );
-        $data= array_merge($data, $args);
+        $data = array_merge($data, $args);
         $this->sendData($data);
     }
 
@@ -212,7 +213,7 @@ class WebSocketClient
         }
 
         if (isset($data[0])) {
-            switch($data[0]) {
+            switch ($data[0]) {
                 case self::TYPE_ID_WELCOME:
                     $this->getClient()->onWelcome($data);
                     break;
@@ -288,15 +289,18 @@ class WebSocketClient
             $host = 'localhost';
         }
 
-        return "GET {$this->getPath()} HTTP/1.1" . "\r\n" .
-        "Origin: {$this->getOrigin()}" . "\r\n" .
-        "Host: {$host}:{$this->getPort()}" . "\r\n" .
-        "Sec-WebSocket-Key: {$this->getKey()}" . "\r\n" .
-        "User-Agent: PHPWebSocketClient/" . self::VERSION . "\r\n" .
-        "Upgrade: websocket" . "\r\n" .
-        "Connection: Upgrade" . "\r\n" .
-        "Sec-WebSocket-Protocol: wamp" . "\r\n" .
-        "Sec-WebSocket-Version: 13" . "\r\n" . "\r\n";
+        $origin = $this->getOrigin() ? $this->getOrigin() : "null";
+
+        return
+            "GET {$this->getPath()} HTTP/1.1" . "\r\n" .
+            "Origin: {$origin}" . "\r\n" .
+            "Host: {$host}:{$this->getPort()}" . "\r\n" .
+            "Sec-WebSocket-Key: {$this->getKey()}" . "\r\n" .
+            "User-Agent: PHPWebSocketClient/" . self::VERSION . "\r\n" .
+            "Upgrade: websocket" . "\r\n" .
+            "Connection: Upgrade" . "\r\n" .
+            "Sec-WebSocket-Protocol: wamp" . "\r\n" .
+            "Sec-WebSocket-Version: 13" . "\r\n" . "\r\n";
     }
 
     /**
@@ -430,17 +434,21 @@ class WebSocketClient
     {
         return $this->host;
     }
-    
+
     /**
-     * @param string $origin
+     * @param null|string $origin
      */
     public function setOrigin($origin)
     {
-        $this->origin = (string)$origin;
+        if (null !== $origin) {
+            $this->origin = (string)$origin;
+        } else {
+            $this->origin = null;
+        }
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getOrigin()
     {
