@@ -1,9 +1,9 @@
 # WebSocket client
 
 [![Build Status](https://img.shields.io/travis/gabrielbull/php-websocket-client/master.svg?style=flat)](https://travis-ci.org/gabrielbull/php-websocket-client)
-[![Latest Stable Version](http://img.shields.io/packagist/v/gabrielbull/php-websocket-client.svg?style=flat)](https://packagist.org/packages/gabrielbull/php-websocket-client)
-[![Total Downloads](https://img.shields.io/packagist/dt/gabrielbull/php-websocket-client.svg?style=flat)](https://packagist.org/packages/gabrielbull/php-websocket-client)
-[![License](https://img.shields.io/packagist/l/gabrielbull/php-websocket-client.svg?style=flat)](https://packagist.org/packages/gabrielbull/php-websocket-client)
+[![Latest Stable Version](http://img.shields.io/packagist/v/gabrielbull/websocket-client.svg?style=flat)](https://packagist.org/packages/gabrielbull/websocket-client)
+[![Total Downloads](https://img.shields.io/packagist/dt/gabrielbull/websocket-client.svg?style=flat)](https://packagist.org/packages/gabrielbull/websocket-client)
+[![License](https://img.shields.io/packagist/l/gabrielbull/websocket-client.svg?style=flat)](https://packagist.org/packages/gabrielbull/websocket-client)
 
 A simple WebSocket WAMP client implemented in PHP.
 
