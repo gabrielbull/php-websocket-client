@@ -12,7 +12,7 @@ awesome.
 
 ## Requirements
 
-This library uses PHP 5.3+.
+This library uses PHP 5.4+.
 
 ## Install
 

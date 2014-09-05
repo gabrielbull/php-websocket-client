@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.9",
+        "php": ">=5.4.0",
         "react/socket": "0.4.*"
     },
     "require-dev": {
