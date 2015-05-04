@@ -1,7 +1,7 @@
 <?php
 namespace WebSocketClient;
 
-use React\EventLoop\StreamSelectLoop;
+use React\EventLoop\LoopInterface;
 use React\Socket\Connection;
 use WebSocketClient\Exception\ConnectionException;
 
@@ -26,7 +26,7 @@ class WebSocketClient
     private $key;
 
     /**
-     * @var StreamSelectLoop
+     * @var LoopInterface
      */
     private $loop;
 
@@ -72,13 +72,13 @@ class WebSocketClient
 
     /**
      * @param WebSocketClientInterface $client
-     * @param StreamSelectLoop $loop
+     * @param LoopInterface $loop
      * @param string $host
      * @param int $port
      * @param string $path
      * @param null|string $origin
      */
-    function __construct(WebSocketClientInterface $client, StreamSelectLoop $loop, $host = '127.0.0.1', $port = 8080, $path = '/', $origin = null)
+    public function __construct(WebSocketClientInterface $client, LoopInterface $loop, $host = '127.0.0.1', $port = 8080, $path = '/', $origin = null)
     {
         $this->setLoop($loop);
         $this->setHost($host);
@@ -510,17 +510,17 @@ class WebSocketClient
     }
 
     /**
-     * @param StreamSelectLoop $loop
+     * @param LoopInterface $loop
      * @return $this
      */
-    public function setLoop(StreamSelectLoop $loop)
+    public function setLoop(LoopInterface $loop)
     {
         $this->loop = $loop;
         return $this;
     }
 
     /**
-     * @return StreamSelectLoop
+     * @return LoopInterface
      */
     public function getLoop()
     {
